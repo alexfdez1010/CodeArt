@@ -1,42 +1,47 @@
 import drawBot as draw
+from random import random
 
-RESOLUTION : tuple = (16000, 16000)
-BLACK : tuple = (0, 0, 0, 1)
+RESOLUTION: tuple = (16000, 16000)
+BLACK: tuple = (0, 0, 0, 1)
 
-COEF : tuple = ((-1, -1), (1, -1), (1, 1), (-1, 1))
+COEFS: tuple = ((-1, -1), (1, -1), (1, 1), (-1, 1))
 
 
-def draw_spiral(size):
+def draw_square(p1: tuple, p2: tuple):
+    draw.fill(random(), random(), random(), 1)
+
+    corner_1, corner_2 = (p1[0], p2[1]), (p2[0], p1[1])
+
+    draw.polygon(p1, corner_1, p2, corner_2)
+
+
+def draw_spiral(size: float):
+    points = generate_points(size)
+
+    draw.fill(0, 0, 0, 1)
+    draw.rect(0, 0, size, size)
+
+    for i in range(len(points) - 1):
+        draw_square(points[i], points[i + 1])
+
+
+def generate_points(size: float) -> tuple:
     points = [(size / 2, size / 2)]
-    num1, num2 = 0, 1
+    radios = []
+    num1, num2 = 0, 50
     i = 0
 
-    path = draw.BezierPath()
-    path.moveTo(points[0])
-    draw.fill(None)
-    draw.stroke(0)
-    draw.strokeWidth(25)
+    while 0 <= points[i][0] < size or 0 <= points[i][1] < size:
+        point = points[i][0] + num2 * COEFS[i % 4][0], points[i][1] + num2 * COEFS[i % 4][1]
 
-    arc_point = [0,0]
-
-    while 0 <= points[i][0] < size and 0 <= points[i][1] < size:
-        point = points[i][0] + num2 * COEF[i % 4][0], points[i][1] + num2 * COEF[i % 4][1]
         points.append(point)
+        radios.append(num2)
 
         i += 1
 
-        arc_point[0] = points[i - 1][0] if i & 1 else points[i][0]
-        arc_point[1] = points[i][1] if i & 1 else points[i - 1][1]
-        draw.stroke(0)
-        draw.fill(None)
-
-        path.moveTo(points[i - 1])
-        path.arcTo(points[i], arc_point, num2)
-
         num1, num2 = num2, num1 + num2
 
-    draw.drawPath(path)
-    path.endPath()
+    return points
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ from math import sqrt
 from queue import PriorityQueue
 
 RESOLUTION = (16000, 16000)
-POINT_SIZE = 75
+POINT_SIZE = 200
 
 
 def random_lighter():
@@ -38,45 +38,42 @@ def draw_line(a: tuple, b: tuple) -> None:
     draw.line(a, b)
 
 
-def draw_prim(points: list) -> None:
+def draw_TSP(points: list) -> None:
     n: int = len(points)
     adj_matrix: list = get_adj_matrix(points)
 
-    edges = PriorityQueue()
     visited: list = [False for _ in range(n)]
 
-    count_visited: int = 1
-    vertex: int = randint(0, n - 1)
+    count_visited: int = 0
+    initial: int = randint(0, n - 1)
+    vertex: int = initial
+    arg_max: int
 
     visited[vertex] = True
 
     while count_visited < n:
 
-        for i in range(n):
-            if not visited[i]:
-                edges.put((adj_matrix[vertex][i], vertex, i))
+        arg_max = -1
+        for i in range(0, n):
+            if not visited[i] and (arg_max == -1 or adj_matrix[vertex][i] < adj_matrix[vertex][arg_max]):
+                arg_max = i
 
-        edge: tuple = None
-        while edge is None:
-            edge = edges.get()
-            if visited[edge[2]]:
-                edge = None
-
-        draw_line(points[edge[1]], points[edge[2]])
-        vertex = edge[2]
+        draw_line(points[vertex], points[arg_max])
+        vertex = arg_max
         visited[vertex] = True
         count_visited += 1
+
+    draw_line(points[vertex], points[initial])
 
     for point in points:
         draw_point(point)
 
 
 if __name__ == "__main__":
-    seed(0)
     draw.newDrawing()
     draw.size(RESOLUTION[0], RESOLUTION[1])
     draw.fill(0)
     draw.rect(0, 0, RESOLUTION[0], RESOLUTION[1])
-    draw_prim(generate_random_points(1000))
-    draw.saveImage("MST.svg")
+    draw_TSP(generate_random_points(150))
+    draw.saveImage("TSP.jpeg")
     draw.endDrawing()

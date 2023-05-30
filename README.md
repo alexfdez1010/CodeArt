@@ -1,8 +1,10 @@
 # CodeArt - Create Beautiful Art With Code
 
-![https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white](https://www.instagram.com/ArtificialCodeArt/)
+[![](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/ArtificialCodeArt/)
 
 Welcome to the **CodeArt** repository, your one-stop destination for generating images with code! Built with Python and leveraging the power of the DrawBot library, this tool aims to unlock a new creative realm where programming meets art.
+
+The official Instagram account is [ArtificialCodeArt](https://www.instagram.com/ArtificialCodeArt/)
 
 ## Prerequisites
 
